@@ -12,7 +12,6 @@
             padding: 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* Полностью убирает синюю мобильную обводку и вспышку при клике */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -22,7 +21,6 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             letter-spacing: 2px;
             overflow-x: hidden;
-            /* dynamic viewport height (dvh) железобетонно убирает черную полосу снизу на смартфонах */
             height: 100vh;
             height: 100dvh;
             scroll-behavior: smooth;
@@ -44,12 +42,12 @@
 
         @media (max-width: 768px) {
             section {
-                /* На мобильных контент упирается в самые края экрана, кроме верха и низа */
-                padding: 120px 20px 40px 20px; 
+                /* На мобильных контент идет до самых краев экрана по бокам и снизу */
+                padding: 130px 20px 20px 20px; 
             }
         }
 
-        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Десктопная версия: отступы 20px по кругу, верх 60px) */
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Десктопная версия) */
         .premium-frame {
             position: fixed;
             top: 0;
@@ -80,24 +78,29 @@
                 inset 20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset -20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
-            transition: padding 0.3s ease, box-shadow 0.3s ease;
         }
 
         @media (max-width: 768px) {
-            /* ИСПРАВЛЕНИЕ РАМКИ НА СМАРТФОНАХ: */
+            /* КАРДИНАЛЬНОЕ ИСПРАВЛЕНИЕ ДЛЯ ТЕЛЕФОНОВ: */
             .premium-frame {
-                /* Убираем боковые рамки (0 пикселей слева и справа) */
-                padding-left: 0px;
-                padding-right: 0px;
-                /* Верхняя матовая планка увеличена на 50% (была 60px, стала 90px) */
-                padding-top: 90px;
-                /* Нижняя рамка прижата к самому краю экрана смартфона */
-                padding-bottom: 20px;
+                /* Превращаем раму в обычную верхнюю плашку */
+                height: 90px; 
+                width: 100vw;
+                padding: 0;
                 
-                /* Пересчитываем тени под новые границы, чтобы бока не темнели */
-                box-shadow: 
-                    inset 0 90px 25px -10px rgba(0, 0, 0, 0.5),
-                    inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
+                /* Сбрасываем маски, так как вырезать центр больше не нужно */
+                mask: none;
+                -webkit-mask: none;
+                
+                /* Оставляем матовое стекло только сверху */
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                
+                /* Тень идет только от верхней шапки вниз, бока и низ идеально чистые */
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+                border: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
         }
 
@@ -130,9 +133,8 @@
 
         @media (max-width: 768px) {
             .nav-container {
-                /* Идеально центрируем кнопки внутри новой увеличенной шапки 90px */
                 top: 36px;
-                right: 30px;
+                right: 25px;
                 gap: 20px;
             }
             .nav-link {
@@ -203,7 +205,7 @@
             65% { opacity: 0.9; filter: blur(3px) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
             100% { opacity: 1; filter: blur(0px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
         }
-        <style>
+    <style>
         /* СТИЛИ КОНТЕНТА И СЕТОК ВНУТРЯНКИ */
         .section-title {
             font-size: 32px;
@@ -496,17 +498,17 @@
 </head>
 <body>
 
-    <!-- «НАРУЖКА»: Без боковых полей на смартфонах, утолщенный верх (90px) -->
+    <!-- «НАРУЖКА»: Полностью убирает рамки на смартфонах, оставляя только верхнюю шапку 90px -->
     <div class="premium-frame"></div>
 
-    <!-- Текстовая навигация, адаптированная под новую высоту шапки -->
+    <!-- Текстовая навигация -->
     <div class="nav-container">
         <a href="#capabilities" class="nav-link">Capabilities</a>
         <a href="#works" class="nav-link">Works</a>
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА (Контент, бесшовно уходящий под матовую раму) -->
+    <!-- ВНУТРЯНКА САЙТА (Контент) -->
 
     <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
