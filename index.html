@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HILVL .Studio — Premium Digital Experiences</title>
     <style>
-        /* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
+        /* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ И СБРОС СТИЛЕЙ */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            /* Полностью убирает синюю мобильную обводку при клике на кнопки */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -21,19 +22,19 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             letter-spacing: 2px;
             overflow-x: hidden;
-            /* Комбинация dvh и fill-available намертво уничтожает черную полосу на смартфонах */
+            /* svh и fill-available намертво уничтожают черную полосу снизу на смартфонах */
             height: 100vh;
-            height: 100dvh;
+            height: 100svh;
             min-height: -webkit-fill-available;
             scroll-behavior: smooth;
         }
 
-        /* ПОЛНОЭКРАННЫЕ ИЗОЛИРОВАННЫЕ СЕКЦИИ САЙТА */
+        /* ПОЛНОЭКРАННЫЕ ИЗОЛИРОВАННЫЕ СЕКЦИИ САЙТА С GPU-УСКОРЕНИЕМ */
         section {
             position: relative;
             width: 100%;
             min-height: 100vh;
-            min-height: 100dvh;
+            min-height: 100svh;
             min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
@@ -41,23 +42,26 @@
             align-items: center;
             padding: 140px calc(20px + 5%) 80px calc(20px + 5%);
             overflow: hidden;
-            will-change: transform; /* Фиксация от перескоков */
+            /* Форсированный перенос рендеринга на видеокарту телефона (убирает перескоки при скролле) */
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         @media (max-width: 768px) {
             section {
-                padding: 120px 20px 40px 20px; 
+                /* На мобильных контент дышит шире до самых краев */
+                padding: 130px 20px 20px 20px; 
             }
         }
-
-        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Исправлено: центр 100% прозрачный и четкий) */
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО С АППАРАТНЫМ GPU-УСКОРЕНИЕМ */
         .premium-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh;
+            height: 100svh;
             pointer-events: none;
             z-index: 90;
             
@@ -82,10 +86,15 @@
                 inset 20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset -20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
+
+            /* Включение видеокарты смартфона для шёлковой прокрутки под размытием */
+            will-change: transform, backdrop-filter;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         @media (max-width: 768px) {
-            /* Мобильная версия рамки: бока и низ полностью удалены, только верхняя шапка 90px */
+            /* Мобильная версия: бока и низ убраны, остаётся монолитная верхняя матовая шапка 90px */
             .premium-frame {
                 height: 90px; 
                 width: 100vw;
@@ -106,7 +115,7 @@
             }
         }
 
-        /* ПАНЕЛЬ НАВИГАЦИИ */
+        /* ПАНЕЛЬ НАВИГАЦИИ СТРОГО НА МАТОВОЙ НАРУЖКЕ */
         .nav-container {
             position: fixed;
             top: 22px;
@@ -144,7 +153,7 @@
                 letter-spacing: 1.5px;
             }
         }
-        /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ (Без перескоков) */
+        /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ */
         .hero-logo {
             display: flex;
             flex-direction: column;
@@ -153,6 +162,8 @@
             text-align: center;
             width: 100%;
             will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         .brand-name {
@@ -275,6 +286,9 @@
             border-radius: 12px;
             background-color: #111111;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         .work-item img {
@@ -315,7 +329,6 @@
             background-color: #FFFFFF;
             color: #000000;
         }
-
         /* ПРЕМИАЛЬНЫЙ ТЕМНЫЙ ПОП-АП (Идеальный защитный щит) */
         .popup-overlay {
             position: fixed;
@@ -323,8 +336,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh;
-            background-color: rgba(0, 0, 0, 0.65); /* Затемнение фона */
+            height: 100svh;
+            background-color: rgba(0, 0, 0, 0.65);
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -348,7 +361,6 @@
             width: 50vw;
             max-height: 80vh;
             min-width: 600px;
-            /* Плотное, почти непрозрачное темное стекло. Полностью перекрывает нижний текст */
             background-color: rgba(10, 10, 10, 0.96); 
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
@@ -470,7 +482,7 @@
 </head>
 <body>
 
-    <!-- «НАРУЖКА»: Защитная матовая панель, на мобильных сужается до верхней шапки -->
+    <!-- «НАРУЖКА»: Защитное стекло по краям, на смартфонах превращается в верхнюю шапку 90px -->
     <div class="premium-frame"></div>
 
     <!-- Текстовое меню навигации -->
@@ -480,7 +492,7 @@
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА (Контент, уходящий под матовую раму без багов) -->
+    <!-- ВНУТРЯНКА САЙТА (Контент) -->
 
     <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
