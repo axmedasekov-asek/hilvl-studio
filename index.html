@@ -21,9 +21,10 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             letter-spacing: 2px;
             overflow-x: hidden;
+            /* Комбинация dvh и fill-available намертво уничтожает черную полосу на смартфонах */
             height: 100vh;
+            height: 100dvh;
             min-height: -webkit-fill-available;
-            min-height: 100dvh;
             scroll-behavior: smooth;
         }
 
@@ -32,14 +33,15 @@
             position: relative;
             width: 100%;
             min-height: 100vh;
-            min-height: -webkit-fill-available;
             min-height: 100dvh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 140px calc(20px + 5%) 80px calc(20px + 5%);
             overflow: hidden;
+            will-change: transform; /* Фиксация от перескоков */
         }
 
         @media (max-width: 768px) {
@@ -48,21 +50,21 @@
             }
         }
 
-        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО */
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Исправлено: центр 100% прозрачный и четкий) */
         .premium-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            min-height: -webkit-fill-available;
-            min-height: 100dvh;
+            height: 100dvh;
             pointer-events: none;
             z-index: 90;
             
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             
+            /* CSS-маска: оставляет размытие ТОЛЬКО на полях рамы, центр полностью прозрачный */
             mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             
@@ -83,6 +85,7 @@
         }
 
         @media (max-width: 768px) {
+            /* Мобильная версия рамки: бока и низ полностью удалены, только верхняя шапка 90px */
             .premium-frame {
                 height: 90px; 
                 width: 100vw;
@@ -141,8 +144,7 @@
                 letter-spacing: 1.5px;
             }
         }
-
-        /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ */
+        /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ (Без перескоков) */
         .hero-logo {
             display: flex;
             flex-direction: column;
@@ -205,6 +207,7 @@
             65% { opacity: 0.9; filter: blur(3px) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
             100% { opacity: 1; filter: blur(0px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
         }
+
         /* СТИЛИ КОНТЕНТА И СЕТОК ВНУТРЯНКИ */
         .section-title {
             font-size: 32px;
@@ -263,11 +266,7 @@
             .works-grid { grid-template-columns: 1fr; gap: 30px; }
         }
 
-        .work-item {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
+        .work-item { display: flex; flex-direction: column; width: 100%; }
 
         .work-img-box {
             width: 100%;
@@ -317,16 +316,15 @@
             color: #000000;
         }
 
-        /* ПОЛНОСТЬЮ ПЕРЕРАБОТАННЫЙ БЕСШОВНЫЙ ПОП-АП */
+        /* ПРЕМИАЛЬНЫЙ ТЕМНЫЙ ПОП-АП (Идеальный защитный щит) */
         .popup-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            min-height: -webkit-fill-available;
-            min-height: 100dvh;
-            background-color: rgba(0, 0, 0, 0.6);
+            height: 100dvh;
+            background-color: rgba(0, 0, 0, 0.65); /* Затемнение фона */
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -350,15 +348,16 @@
             width: 50vw;
             max-height: 80vh;
             min-width: 600px;
-            background-color: rgba(10, 10, 10, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            /* Плотное, почти непрозрачное темное стекло. Полностью перекрывает нижний текст */
+            background-color: rgba(10, 10, 10, 0.96); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
             padding: 40px;
             display: flex;
             flex-direction: column;
             position: relative;
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(40px) saturate(140%);
+            -webkit-backdrop-filter: blur(40px) saturate(140%);
             transform: translate3d(0, 15px, 0) scale(0.97);
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.25, 1);
             will-change: transform;
@@ -481,7 +480,9 @@
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА -->
+    <!-- ВНУТРЯНКА САЙТА (Контент, уходящий под матовую раму без багов) -->
+
+    <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
         <div class="hero-logo">
             <div class="brand-name">
@@ -495,24 +496,26 @@
         </div>
     </section>
 
+    <!-- СЕКЦИЯ 2: ИИ-КОМПЕТЕНЦИИ -->
     <section id="capabilities">
         <h2 class="section-title">Core Capabilities</h2>
         <div class="capabilities-grid">
             <div class="pillar">
                 <h3>AI-Assisted Development & Rapid Prototyping</h3>
-                <p>Leveraging state-of-the-art AI coding assistants, LLM-based code generation, and automated debugging workflows to independently architect websites, browser-based games, and applications. This methodology drastically compresses MVP development timelines.</p>
+                <p>Leveraging state-of-the-art AI coding assistants, LLM-based code generation, and automated debugging workflows to independently architect websites, browser-based games, and applications. This methodology drastically compresses MVP development timelines, skipping traditional engineering bottlenecks.</p>
             </div>
             <div class="pillar">
                 <h3>Generative AI for Commercial Media Production</h3>
-                <p>Applying cutting-edge generative image synthesis and AI video pipelines to produce and edit commercial-grade visual assets. Utilizing advanced prompt engineering techniques.</p>
+                <p>Applying cutting-edge generative image synthesis and AI video pipelines to produce and edit commercial-grade visual assets. Utilizing advanced prompt engineering techniques to guarantee consistent, brand-aligned aesthetic outputs at scale.</p>
             </div>
             <div class="pillar">
                 <h3>Local LLM Deployment & Autonomous AI Agents</h3>
-                <p>Configuring and deploying large language models inside local, on-premise environments via CLI and terminal infrastructure. Designing and orchestrating autonomous AI agent pipelines.</p>
+                <p>Configuring and deploying large language models inside local, on-premise environments via CLI and terminal infrastructure. Designing and orchestrating autonomous AI agent pipelines for deep workflow automation and secure, self-hosted AI architecture management.</p>
             </div>
         </div>
     </section>
 
+    <!-- СЕКЦИЯ 3: SELECTED WORKS -->
     <section id="works">
         <h2 class="section-title">Selected Works</h2>
         <div class="works-grid">
@@ -543,6 +546,7 @@
         </div>
     </section>
 
+    <!-- СЕКЦИЯ 4: ФУТЕР -->
     <section id="footer">
         <div class="footer-content">
             <h2>Let's Create Something Extraordinary</h2>
@@ -550,19 +554,27 @@
         </div>
     </section>
 
+    <!-- ХОСТИНГ МОДЕРНИЗИРОВАННОГО МАТОВОГО ПОП-АП ОКНА -->
     <div class="popup-overlay" id="projectPopup">
         <div class="popup-window">
             <button class="popup-close" id="closePopup">✕</button>
             <h3 class="popup-title">Select Service</h3>
             <div class="cubes-container">
-                <div class="service-cube" data-service="AI-Assisted Development & Rapid Prototyping">AI-Assisted Development & Rapid Prototyping</div>
-                <div class="service-cube" data-service="Generative AI for Commercial Media Production">Generative AI for Commercial Media Production</div>
-                <div class="service-cube" data-service="Local LLM Deployment & Autonomous AI Agents">Local LLM Deployment & Autonomous AI Agents</div>
+                <div class="service-cube" data-service="AI-Assisted Development & Rapid Prototyping">
+                    AI-Assisted Development & Rapid Prototyping
+                </div>
+                <div class="service-cube" data-service="Generative AI for Commercial Media Production">
+                    Generative AI for Commercial Media Production
+                </div>
+                <div class="service-cube" data-service="Local LLM Deployment & Autonomous AI Agents">
+                    Local LLM Deployment & Autonomous AI Agents
+                </div>
             </div>
             <a href="#" class="popup-submit-btn" id="submitProject">Send Request</a>
         </div>
     </div>
 
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ КЛИКАМИ И СБОРКИ АВТО-ПИСЬМА MAILTO -->
     <script>
         const openPopupBtn = document.querySelector('.cta-btn');
         const popupOverlay = document.getElementById('projectPopup');
@@ -572,14 +584,17 @@
         
         let selectedService = "";
 
+        // Идеально плавное открытие окна через CSS-классы
         openPopupBtn.addEventListener('click', (e) => {
             e.preventDefault();
             popupOverlay.classList.add('active');
         });
 
+        // Бесшовное закрытие окна и сброс параметров
         closePopupBtn.addEventListener('click', () => { closePopupAndReset(); });
         popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupAndReset(); });
 
+        // Управление матовыми кубиками и автозаполнение почты
         serviceCubes.forEach(cube => {
             cube.addEventListener('click', () => {
                 serviceCubes.forEach(c => c.classList.remove('selected'));
