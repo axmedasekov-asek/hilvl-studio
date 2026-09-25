@@ -23,7 +23,7 @@
             scroll-behavior: smooth;
         }
 
-        /* НАПРАВЛЯЮЩИЕ И ОТСТУПЫ ДЛЯ ВНУТРЯНКИ САЙТА */
+        /* НАПРАВЛЯЮЩИЕ И ОТСТУПЫ ДЛЯ ВНУТРЯНКИ САЙТА (АДАПТИВНЫЕ) */
         section {
             position: relative;
             width: 100%;
@@ -34,6 +34,12 @@
             align-items: center;
             padding: 140px calc(20px + 5%) 80px calc(20px + 5%);
             overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 100px 25px 60px 25px; /* Уменьшаем отступы на мобильных */
+            }
         }
 
         /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО ПО ПЕРИМЕТРУ С ВЫРЕЗАННЫМ ЦЕНТРОМ (ВНУТРЯНКОЙ) */
@@ -68,7 +74,7 @@
                 inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
         }
 
-        /* ПАНЕЛЬ НАВИГАЦИИ — РАСПОЛОЖЕНА СТРОГО НА МАТОВОЙ НАРУЖКЕ */
+        /* НАВИГАЦИЯ (Адаптируется под тач-скрины) */
         .nav-container {
             position: fixed;
             top: 22px;
@@ -95,6 +101,17 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
+        @media (max-width: 768px) {
+            .nav-container {
+                right: 35px;
+                gap: 20px; /* Сужаем шаги навигации на телефонах */
+            }
+            .nav-link {
+                font-size: 9px;
+                letter-spacing: 1.5px;
+            }
+        }
+
         /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ */
         .hero-logo {
             display: flex;
@@ -102,6 +119,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            width: 100%;
         }
 
         .brand-name {
@@ -141,6 +159,17 @@
             animation-delay: 1.5s; 
         }
 
+        /* Адаптивный размер шрифта логотипа под экраны смартфонов */
+        @media (max-width: 768px) {
+            .brand-name {
+                font-size: 42px; /* Идеально встает на любые iPhone/Android */
+            }
+            .subtitle {
+                font-size: 42px;
+                margin-left: 10px;
+            }
+        }
+
         @keyframes revealLetters {
             0% { max-width: 0; opacity: 0; clip-path: inset(0 100% 0 0); }
             100% { max-width: 1ch; opacity: 1; margin: 0 4px; clip-path: inset(0 0 0 0); }
@@ -151,8 +180,8 @@
             65% { opacity: 0.9; filter: blur(3px) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
             100% { opacity: 1; filter: blur(0px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
         }
-
-        /* СТИЛИ КОНТЕНТА И СЕТОК */
+        <style>
+        /* СТИЛИ КОНТЕНТА И СЕТОК ВНУТРЯНКИ */
         .section-title {
             font-size: 32px;
             font-weight: 300;
@@ -162,12 +191,25 @@
             letter-spacing: 4px;
         }
 
+        @media (max-width: 768px) {
+            .section-title { font-size: 24px; margin-bottom: 40px; }
+        }
+
+        /* Премиальная трехколонная сетка ИИ-компетенций (Адаптивная) */
         .capabilities-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 50px;
             width: 100%;
             max-width: 1200px;
+        }
+
+        @media (max-width: 768px) {
+            /* На мобильных сетка плавно перестраивается в одну удобную колонку */
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
         }
 
         .pillar h3 {
@@ -185,13 +227,26 @@
             opacity: 0.7;
         }
 
-        /* СЕТКА ПОРТФОЛИО */
+        @media (max-width: 768px) {
+            .pillar h3 { font-size: 18px; margin-bottom: 12px; }
+            .pillar p { font-size: 14px; }
+        }
+
+        /* ЖЁСТКАЯ АДАПТИВНАЯ СЕТКА ПОРТФОЛИО */
         .works-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 40px;
             width: 100%;
             max-width: 1200px;
+        }
+
+        @media (max-width: 768px) {
+            /* На мобильных фото выстраиваются друг под другом */
+            .works-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
         }
 
         .work-item {
@@ -202,7 +257,7 @@
 
         .work-img-box {
             width: 100%;
-            aspect-ratio: 4/3;
+            aspect-ratio: 4/3; /* Защита от схлопывания картинки в 0 на любых экранах */
             overflow: hidden;
             border-radius: 12px;
             background-color: #111111;
@@ -229,10 +284,14 @@
         .work-title { font-size: 16px; font-weight: 700; text-transform: uppercase; }
         .work-category { font-size: 13px; font-weight: 300; opacity: 0.5; }
 
-        /* ФУТЕР */
+        /* СТИЛИ ФУТЕРА */
         .footer-content { text-align: center; }
         .footer-content h2 { font-size: 42px; font-weight: 900; text-transform: uppercase; margin-bottom: 40px; }
         
+        @media (max-width: 768px) {
+            .footer-content h2 { font-size: 26px; margin-bottom: 30px; }
+        }
+
         .cta-btn {
             display: inline-block;
             padding: 16px 36px;
@@ -251,14 +310,14 @@
             color: #000000;
         }
 
-        /* СТИЛИ ПРЕМИАЛЬНОГО МАТОВОГО ПОП-АПА */
+        /* АДАПТИВНЫЙ ПРЕМИАЛЬНЫЙ МАТОВЫЙ ПОП-АП */
         .popup-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -267,6 +326,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: opacity 0.5s ease, visibility 0.5s ease;
+            padding: 20px;
         }
 
         .popup-overlay.active {
@@ -275,9 +335,10 @@
             pointer-events: auto;
         }
 
+        /* Окно поп-апа: 50vw на ПК, автоматически расширяется на смартфонах */
         .popup-window {
             width: 50vw;
-            height: 55vh;
+            max-height: 70vh;
             min-width: 600px;
             background-color: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -291,20 +352,33 @@
             -webkit-backdrop-filter: blur(40px) saturate(120%);
             transform: scale(0.95);
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.25, 1);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            /* Адаптация окна под вертикальные экраны мобильных */
+            .popup-window {
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+                max-height: 85vh;
+                padding: 30px 20px 20px 20px;
+            }
         }
 
         .popup-overlay.active .popup-window { transform: scale(1); }
 
         .popup-close {
             position: absolute;
-            top: 25px;
-            right: 25px;
+            top: 20px;
+            right: 20px;
             background: none;
             border: none;
             color: rgba(255, 255, 255, 0.5);
             font-size: 24px;
             font-weight: 300;
             cursor: pointer;
+            z-index: 10;
         }
         .popup-close:hover { color: #FFFFFF; }
 
@@ -317,12 +391,26 @@
             margin-bottom: 25px;
         }
 
+        @media (max-width: 768px) {
+            .popup-title { font-size: 16px; margin-bottom: 15px; }
+        }
+
+        /* Контейнер кубиков (Адаптивный) */
         .cubes-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             flex-grow: 1;
             margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            /* На мобильных кубики встают в один вертикальный ряд */
+            .cubes-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
         }
 
         .service-cube {
@@ -341,6 +429,10 @@
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.25, 1, 0.25, 1);
+        }
+
+        @media (max-width: 768px) {
+            .service-cube { font-size: 11px; padding: 15px; }
         }
 
         .service-cube:hover {
@@ -379,7 +471,9 @@
             pointer-events: auto;
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
         }
-        .popup-submit-btn.enabled:hover { transform: scale(1.02); }
+        @media (max-width: 768px) {
+            .popup-submit-btn { padding: 14px; font-size: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -387,14 +481,14 @@
     <!-- «НАРУЖКА»: Физическое матовое паспарту по краям экрана с вырезанным центром -->
     <div class="premium-frame"></div>
 
-    <!-- Навигация, лежащая строго поверх матовой наружки -->
+    <!-- Навигация на верхней планке -->
     <div class="nav-container">
         <a href="#capabilities" class="nav-link">Capabilities</a>
         <a href="#works" class="nav-link">Works</a>
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА (Контент, уходящий под матовое стекло при скролле) -->
+    <!-- ВНУТРЯНКА САЙТА (Контент) -->
 
     <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
@@ -468,7 +562,7 @@
         </div>
     </section>
 
-    <!-- ХОСТИНГ СВЕТЛОГО МАТОВОГО ПОП-АП ОКНА -->
+    <!-- ХОСТИНГ АДАПТИВНОГО СВЕТЛОГО МАТОВОГО ПОП-АП ОКНА -->
     <div class="popup-overlay" id="projectPopup">
         <div class="popup-window">
             <button class="popup-close" id="closePopup">✕</button>
@@ -498,17 +592,17 @@
         
         let selectedService = "";
 
-        // Открытие окна
+        // Открытие поп-апа
         openPopupBtn.addEventListener('click', (e) => {
             e.preventDefault();
             popupOverlay.classList.add('active');
         });
 
-        // Закрытие окна по клику на крестик или фон
+        // Закрытие поп-апа
         closePopupBtn.addEventListener('click', () => { closePopupAndReset(); });
         popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupAndReset(); });
 
-        // Логика кубиков и сборка письма Mailto
+        // Логика выбора кубиков и сборка письма Mailto
         serviceCubes.forEach(cube => {
             cube.addEventListener('click', () => {
                 serviceCubes.forEach(c => c.classList.remove('selected'));
