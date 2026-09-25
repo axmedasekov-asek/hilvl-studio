@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HILVL .Studio — Premium Digital Experiences</title>
     <style>
-               /* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
-               * {
+        /* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -16,21 +16,24 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-
         html, body {
             background-color: #000000;
             color: #FFFFFF;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             letter-spacing: 2px;
             overflow-x: hidden;
+            /* dynamic viewport height (dvh) железобетонно убирает черную полосу снизу на смартфонах */
+            height: 100vh;
+            height: 100dvh;
             scroll-behavior: smooth;
         }
 
-        /* НАПРАВЛЯЮЩИЕ И ОТСТУПЫ ДЛЯ ВНУТРЯНКИ САЙТА (АДАПТИВНЫЕ) */
+        /* НАПРАВЛЯЮЩИЕ И ОТСТУПЫ ДЛЯ ВНУТРЯНКИ САЙТА */
         section {
             position: relative;
             width: 100%;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -41,17 +44,19 @@
 
         @media (max-width: 768px) {
             section {
-                padding: 100px 25px 60px 25px; /* Уменьшаем отступы на мобильных */
+                /* На мобильных контент упирается в самые края экрана, кроме верха и низа */
+                padding: 120px 20px 40px 20px; 
             }
         }
 
-        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО ПО ПЕРИМЕТРУ С ВЫРЕЗАННЫМ ЦЕНТРОМ (ВНУТРЯНКОЙ) */
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Десктопная версия: отступы 20px по кругу, верх 60px) */
         .premium-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             pointer-events: none;
             z-index: 90;
             
@@ -75,9 +80,28 @@
                 inset 20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset -20px 0 20px -10px rgba(0, 0, 0, 0.5),
                 inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
+            transition: padding 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* НАВИГАЦИЯ (Адаптируется под тач-скрины) */
+        @media (max-width: 768px) {
+            /* ИСПРАВЛЕНИЕ РАМКИ НА СМАРТФОНАХ: */
+            .premium-frame {
+                /* Убираем боковые рамки (0 пикселей слева и справа) */
+                padding-left: 0px;
+                padding-right: 0px;
+                /* Верхняя матовая планка увеличена на 50% (была 60px, стала 90px) */
+                padding-top: 90px;
+                /* Нижняя рамка прижата к самому краю экрана смартфона */
+                padding-bottom: 20px;
+                
+                /* Пересчитываем тени под новые границы, чтобы бока не темнели */
+                box-shadow: 
+                    inset 0 90px 25px -10px rgba(0, 0, 0, 0.5),
+                    inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        /* ПАНЕЛЬ НАВИГАЦИИ */
         .nav-container {
             position: fixed;
             top: 22px;
@@ -106,11 +130,13 @@
 
         @media (max-width: 768px) {
             .nav-container {
-                right: 35px;
-                gap: 20px; /* Сужаем шаги навигации на телефонах */
+                /* Идеально центрируем кнопки внутри новой увеличенной шапки 90px */
+                top: 36px;
+                right: 30px;
+                gap: 20px;
             }
             .nav-link {
-                font-size: 9px;
+                font-size: 10px;
                 letter-spacing: 1.5px;
             }
         }
@@ -162,15 +188,9 @@
             animation-delay: 1.5s; 
         }
 
-        /* Адаптивный размер шрифта логотипа под экраны смартфонов */
         @media (max-width: 768px) {
-            .brand-name {
-                font-size: 42px; /* Идеально встает на любые iPhone/Android */
-            }
-            .subtitle {
-                font-size: 42px;
-                margin-left: 10px;
-            }
+            .brand-name { font-size: 42px; }
+            .subtitle { font-size: 42px; margin-left: 10px; }
         }
 
         @keyframes revealLetters {
@@ -198,7 +218,7 @@
             .section-title { font-size: 24px; margin-bottom: 40px; }
         }
 
-        /* Премиальная трехколонная сетка ИИ-компетенций (Адаптивная) */
+        /* Премиальная трехколонная сетка ИИ-компетенций */
         .capabilities-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -208,7 +228,6 @@
         }
 
         @media (max-width: 768px) {
-            /* На мобильных сетка плавно перестраивается в одну удобную колонку */
             .capabilities-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
@@ -245,7 +264,6 @@
         }
 
         @media (max-width: 768px) {
-            /* На мобильных фото выстраиваются друг под другом */
             .works-grid {
                 grid-template-columns: 1fr;
                 gap: 30px;
@@ -260,7 +278,7 @@
 
         .work-img-box {
             width: 100%;
-            aspect-ratio: 4/3; /* Защита от схлопывания картинки в 0 на любых экранах */
+            aspect-ratio: 4/3;
             overflow: hidden;
             border-radius: 12px;
             background-color: #111111;
@@ -320,6 +338,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             background-color: rgba(0, 0, 0, 0.6);
             z-index: 200;
             display: flex;
@@ -338,7 +357,6 @@
             pointer-events: auto;
         }
 
-        /* Окно поп-апа: 50vw на ПК, автоматически расширяется на смартфонах */
         .popup-window {
             width: 50vw;
             max-height: 70vh;
@@ -359,13 +377,12 @@
         }
 
         @media (max-width: 768px) {
-            /* Адаптация окна под вертикальные экраны мобильных */
             .popup-window {
                 width: 100%;
                 min-width: 100%;
                 height: auto;
                 max-height: 85vh;
-                padding: 30px 20px 20px 20px;
+                padding: 35px 20px 20px 20px;
             }
         }
 
@@ -398,7 +415,6 @@
             .popup-title { font-size: 16px; margin-bottom: 15px; }
         }
 
-        /* Контейнер кубиков (Адаптивный) */
         .cubes-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -408,7 +424,6 @@
         }
 
         @media (max-width: 768px) {
-            /* На мобильных кубики встают в один вертикальный ряд */
             .cubes-container {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -481,17 +496,17 @@
 </head>
 <body>
 
-    <!-- «НАРУЖКА»: Физическое матовое паспарту по краям экрана с вырезанным центром -->
+    <!-- «НАРУЖКА»: Без боковых полей на смартфонах, утолщенный верх (90px) -->
     <div class="premium-frame"></div>
 
-    <!-- Навигация на верхней планке -->
+    <!-- Текстовая навигация, адаптированная под новую высоту шапки -->
     <div class="nav-container">
         <a href="#capabilities" class="nav-link">Capabilities</a>
         <a href="#works" class="nav-link">Works</a>
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА (Контент) -->
+    <!-- ВНУТРЯНКА САЙТА (Контент, бесшовно уходящий под матовую раму) -->
 
     <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
