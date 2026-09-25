@@ -12,7 +12,6 @@
             padding: 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* Полностью убирает синюю мобильную обводку и вспышку при клике */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -22,19 +21,18 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             letter-spacing: 2px;
             overflow-x: hidden;
+            /* svh (Small Viewport Height) намертво убирает черную полосу снизу на смартфонах */
             height: 100vh;
-            /* Берем точную динамическую высоту, рассчитанную JS-скриптом */
-            height: calc(var(--vh, 1vh) * 100);
+            height: 100svh;
             scroll-behavior: smooth;
         }
 
-        /* АДАПТИВНЫЕ СЕКЦИИ САЙТА С ИСПРАВЛЕННОЙ ВЫСОТОЙ */
+        /* ПОЛНОЭКРАННЫЕ ИЗОЛИРОВАННЫЕ СЕКЦИИ САЙТА */
         section {
             position: relative;
             width: 100%;
             min-height: 100vh;
-            /* Насильно растягиваем секции до физических границ экрана на телефонах */
-            min-height: calc(var(--vh, 1vh) * 100);
+            min-height: 100svh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -45,19 +43,19 @@
 
         @media (max-width: 768px) {
             section {
-                /* На мобильных контент идет до самых краев экрана по бокам и снизу */
-                padding: 130px 20px 20px 20px; 
+                /* На мобильных убираем внутренние боковые зазоры, контент дышит шире */
+                padding: 120px 20px 40px 20px; 
             }
         }
 
-        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Десктопная версия) */
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО (Десктопная версия: 20px по краям, 60px верх) */
         .premium-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
+            height: 100svh;
             pointer-events: none;
             z-index: 90;
             
@@ -84,7 +82,7 @@
         }
 
         @media (max-width: 768px) {
-            /* ЖЕСТКОЕ ИСПРАВЛЕНИЕ ДЛЯ СМАРТФОНОВ: убираем бока и низ, убираем маски */
+            /* КАРДИНАЛЬНОЕ ИСПРАВЛЕНИЕ РАМКИ НА ТЕЛЕФОНАХ: бока и низ полностью удалены */
             .premium-frame {
                 height: 90px; 
                 width: 100vw;
@@ -92,7 +90,6 @@
                 top: 0;
                 left: 0;
                 bottom: auto;
-                
                 mask: none;
                 -webkit-mask: none;
                 
@@ -144,6 +141,7 @@
                 letter-spacing: 1.5px;
             }
         }
+
         /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ */
         .hero-logo {
             display: flex;
@@ -206,7 +204,6 @@
             65% { opacity: 0.9; filter: blur(3px) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
             100% { opacity: 1; filter: blur(0px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
         }
-
         /* СТИЛИ КОНТЕНТА И СЕТОК ВНУТРЯНКИ */
         .section-title {
             font-size: 32px;
@@ -230,10 +227,7 @@
         }
 
         @media (max-width: 768px) {
-            .capabilities-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
+            .capabilities-grid { grid-template-columns: 1fr; gap: 40px; }
         }
 
         .pillar h3 {
@@ -265,10 +259,7 @@
         }
 
         @media (max-width: 768px) {
-            .works-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
+            .works-grid { grid-template-columns: 1fr; gap: 30px; }
         }
 
         .work-item {
@@ -296,13 +287,7 @@
         .work-item:hover .work-img-box { transform: scale(1.03); }
         .work-item:hover img { transform: scale(1.06); }
 
-        .work-info {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
+        .work-info { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; }
         .work-title { font-size: 16px; font-weight: 700; text-transform: uppercase; }
         .work-category { font-size: 13px; font-weight: 300; opacity: 0.5; }
 
@@ -331,62 +316,66 @@
             color: #000000;
         }
 
-        /* АДАПТИВНЫЙ ПРЕМИАЛЬНЫЙ МАТОВЫЙ ПОП-АП */
+        /* ПОЛНОСТЬЮ ПЕРЕРАБОТАННЫЙ БЕСШОВНЫЙ ПОП-АП (БЕЗ ПЕРЕСКОКОВ) */
         .popup-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
+            height: 100svh;
             background-color: rgba(0, 0, 0, 0.6);
             z-index: 200;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            /* Плавное проявление через аппаратную прозрачность */
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            padding: 20px;
+            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.25, 1), visibility 0.5s step-end;
+            will-change: opacity;
         }
 
         .popup-overlay.active {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
+            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.25, 1), visibility 0s step-start;
         }
 
         .popup-window {
             width: 50vw;
-            max-height: 70vh;
+            max-height: 80vh;
             min-width: 600px;
-            background-color: rgba(255, 255, 255, 0.07);
+            background-color: rgba(255, 255, 255, 0.08); /* Светлее основы */
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 24px;
             padding: 40px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             position: relative;
-            backdrop-filter: blur(40px) saturate(120%);
-            -webkit-backdrop-filter: blur(40px) saturate(120%);
-            transform: scale(0.95);
+            backdrop-filter: blur(40px) saturate(130%);
+            -webkit-backdrop-filter: blur(40px) saturate(130%);
+            /* Использование 3D-трансформ исключает любые скачки в конце анимации */
+            transform: translate3d(0, 15px, 0) scale(0.97);
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.25, 1);
-            overflow-y: auto;
+            will-change: transform;
+        }
+
+        .popup-overlay.active .popup-window {
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
         @media (max-width: 768px) {
             .popup-window {
                 width: 100%;
                 min-width: 100%;
-                height: auto;
                 max-height: 85vh;
-                padding: 35px 20px 20px 20px;
+                padding: 40px 20px 20px 20px;
             }
         }
-
-        .popup-overlay.active .popup-window { transform: scale(1); }
 
         .popup-close {
             position: absolute;
@@ -403,32 +392,23 @@
         .popup-close:hover { color: #FFFFFF; }
 
         .popup-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 300;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-align: center;
-            margin-bottom: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .popup-title { font-size: 16px; margin-bottom: 15px; }
+            margin-bottom: 30px;
         }
 
         .cubes-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            flex-grow: 1;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         @media (max-width: 768px) {
-            .cubes-container {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                margin-bottom: 20px;
-            }
+            .cubes-container { grid-template-columns: 1fr; gap: 12px; margin-bottom: 25px; }
         }
 
         .service-cube {
@@ -440,29 +420,26 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             line-height: 1.4;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.25, 1);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.25, 1);
         }
 
         @media (max-width: 768px) {
             .service-cube { font-size: 11px; padding: 15px; }
         }
 
-        .service-cube:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
+        .service-cube:hover { background-color: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.4); }
 
         .service-cube.selected {
             background-color: rgba(255, 255, 255, 0.15);
             border-color: #FFFFFF;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
         }
 
         .popup-submit-btn {
@@ -479,7 +456,7 @@
             text-decoration: none;
             text-align: center;
             pointer-events: none; 
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.25, 1);
         }
 
         .popup-submit-btn.enabled {
@@ -487,26 +464,24 @@
             color: #000000;
             background-color: #FFFFFF;
             pointer-events: auto;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
         }
-        @media (max-width: 768px) {
-            .popup-submit-btn { padding: 14px; font-size: 12px; }
-        }
+        @media (max-width: 768px) { .popup-submit-btn { padding: 14px; font-size: 12px; } }
     </style>
 </head>
 <body>
 
-    <!-- «НАРУЖКА»: Полностью убирает рамки на смартфонах, оставляя только верхнюю шапку 90px -->
+    <!-- «НАРУЖКА»: Защитная матовая панель, на мобильных сужается до верхней шапки -->
     <div class="premium-frame"></div>
 
-    <!-- Текстовая навигация -->
+    <!-- Текстовое меню навигации -->
     <div class="nav-container">
         <a href="#capabilities" class="nav-link">Capabilities</a>
         <a href="#works" class="nav-link">Works</a>
         <a href="#footer" class="nav-link">Contact</a>
     </div>
 
-    <!-- ВНУТРЯНКА САЙТА (Контент) -->
+    <!-- ВНУТРЯНКА САЙТА (Контент, уходящий под матовую раму без багов) -->
 
     <!-- СЕКЦИЯ 1: ИНТРО -->
     <section id="hero">
@@ -541,7 +516,7 @@
         </div>
     </section>
 
-    <!-- СЕКЦИЯ 3: SELECTED WORKS -->
+    <!-- СЕКЦИЯ 3: PORTFOLIO (PNG-картинки с жестким aspect-ratio) -->
     <section id="works">
         <h2 class="section-title">Selected Works</h2>
         <div class="works-grid">
@@ -580,7 +555,7 @@
         </div>
     </section>
 
-    <!-- ХОСТИНГ АДАПТИВНОГО СВЕТЛОГО МАТОВОГО ПОП-АП ОКНА -->
+    <!-- ХОСТИНГ МОДЕРНИЗИРОВАННОГО МАТОВОГО ПОП-АП ОКНА -->
     <div class="popup-overlay" id="projectPopup">
         <div class="popup-window">
             <button class="popup-close" id="closePopup">✕</button>
@@ -600,7 +575,7 @@
         </div>
     </div>
 
-    <!-- СКРИПТЫ УПРАВЛЕНИЯ ПОП-АПОМ, ЭЛЕКТРОННОЙ ПОЧТОЙ И ФИКСАЦИЕЙ ВЫСОТЫ -->
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ КЛИКАМИ И СБОРКИ АВТО-ПИСЬМА MAILTO -->
     <script>
         const openPopupBtn = document.querySelector('.cta-btn');
         const popupOverlay = document.getElementById('projectPopup');
@@ -610,17 +585,17 @@
         
         let selectedService = "";
 
-        // Открытие поп-апа
+        // Идеально плавное открытие окна через CSS-классы
         openPopupBtn.addEventListener('click', (e) => {
             e.preventDefault();
             popupOverlay.classList.add('active');
         });
 
-        // Закрытие поп-апа
+        // Бесшовное закрытие окна и сброс параметров
         closePopupBtn.addEventListener('click', () => { closePopupAndReset(); });
         popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupAndReset(); });
 
-        // Логика выбора кубиков и сборка письма Mailto
+        // Управление матовыми кубиками и автозаполнение почты
         serviceCubes.forEach(cube => {
             cube.addEventListener('click', () => {
                 serviceCubes.forEach(c => c.classList.remove('selected'));
@@ -643,16 +618,6 @@
             submitBtn.setAttribute('href', '#');
             selectedService = "";
         }
-
-        // Железобетонное исправление черной полосы снизу на мобильных устройствах
-        function fixMobileHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-
-        window.addEventListener('resize', fixMobileHeight);
-        window.addEventListener('orientationchange', fixMobileHeight);
-        fixMobileHeight();
     </script>
 </body>
 </html>
