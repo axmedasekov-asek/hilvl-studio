@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HILVL .Studio — Premium Digital Experiences</title>
+    <style>
+        /* ГЛОБАЛЬНЫЕ НАСТРОЙКИ СТРАНИЦЫ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            letter-spacing: 2px;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* НАПРАВЛЯЮЩИЕ И ОТСТУПЫ ДЛЯ ВНУТРЯНКИ САЙТА */
+        section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 140px calc(20px + 5%) 80px calc(20px + 5%);
+            overflow: hidden;
+        }
+
+        /* «НАРУЖКА» — МАТОВОЕ СТЕКЛО ПО ПЕРИМЕТРУ С ВЫРЕЗАННЫМ ЦЕНТРОМ (ВНУТРЯНКОЙ) */
+        .premium-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 90;
+            
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+            
+            padding-top: 60px;
+            padding-right: 20px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            
+            background-color: rgba(255, 255, 255, 0.02);
+            box-shadow: 
+                inset 0 60px 25px -10px rgba(0, 0, 0, 0.5),
+                inset 20px 0 20px -10px rgba(0, 0, 0, 0.5),
+                inset -20px 0 20px -10px rgba(0, 0, 0, 0.5),
+                inset 0 -20px 20px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ПАНЕЛЬ НАВИГАЦИИ — РАСПОЛОЖЕНА СТРОГО НА МАТОВОЙ НАРУЖКЕ */
+        .nav-container {
+            position: fixed;
+            top: 22px;
+            right: 50px;
+            display: flex;
+            gap: 40px;
+            z-index: 95;
+        }
+
+        .nav-link {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            letter-spacing: 3px;
+            pointer-events: auto;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0);
+        }
+
+        .nav-link:hover {
+            color: #FFFFFF;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* ОРИГИНАЛЬНАЯ АНИМАЦИЯ ЛОГОТИПА НА СТАРТЕ */
+        .hero-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .brand-name {
+            display: flex;
+            font-size: 110px;
+            font-weight: 900;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .base-letter {
+            position: relative;
+            z-index: 2;
+            background-color: transparent; 
+        }
+
+        .inner-letter {
+            max-width: 0;
+            opacity: 0;
+            display: inline-block;
+            text-align: center;
+            clip-path: inset(0 100% 0 0); 
+            animation: revealLetters 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.5s; 
+        }
+
+        .subtitle {
+            font-size: 110px;
+            font-weight: 300;
+            color: #FFFFFF;
+            margin-left: 25px;
+            line-height: 1;
+            opacity: 0;
+            filter: blur(25px);
+            animation: clearStudioAndGlow 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 1.5s; 
+        }
+
+        @keyframes revealLetters {
+            0% { max-width: 0; opacity: 0; clip-path: inset(0 100% 0 0); }
+            100% { max-width: 1ch; opacity: 1; margin: 0 4px; clip-path: inset(0 0 0 0); }
+        }
+
+        @keyframes clearStudioAndGlow {
+            0% { opacity: 0; filter: blur(25px) drop-shadow(0 0 0px rgba(255, 255, 255, 0)); }
+            65% { opacity: 0.9; filter: blur(3px) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
+            100% { opacity: 1; filter: blur(0px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
+        }
+
+        /* СТИЛИ КОНТЕНТА И СЕТОК */
+        .section-title {
+            font-size: 32px;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 80px;
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 50px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .pillar h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .pillar p {
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 300;
+            opacity: 0.7;
+        }
+
+        /* СЕТКА ПОРТФОЛИО */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .work-item {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .work-img-box {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #111111;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+        }
+
+        .work-item:hover .work-img-box { transform: scale(1.03); }
+        .work-item:hover img { transform: scale(1.06); }
+
+        .work-info {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .work-title { font-size: 16px; font-weight: 700; text-transform: uppercase; }
+        .work-category { font-size: 13px; font-weight: 300; opacity: 0.5; }
+
+        /* ФУТЕР */
+        .footer-content { text-align: center; }
+        .footer-content h2 { font-size: 42px; font-weight: 900; text-transform: uppercase; margin-bottom: 40px; }
+        
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 36px;
+            border: 1px solid #FFFFFF;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #FFFFFF;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        .cta-btn:hover { 
+            transform: scale(1.05); 
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
+        /* СТИЛИ ПРЕМИАЛЬНОГО МАТОВОГО ПОП-АПА */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .popup-window {
+            width: 50vw;
+            height: 55vh;
+            min-width: 600px;
+            background-color: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            backdrop-filter: blur(40px) saturate(120%);
+            -webkit-backdrop-filter: blur(40px) saturate(120%);
+            transform: scale(0.95);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.25, 1);
+        }
+
+        .popup-overlay.active .popup-window { transform: scale(1); }
+
+        .popup-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 24px;
+            font-weight: 300;
+            cursor: pointer;
+        }
+        .popup-close:hover { color: #FFFFFF; }
+
+        .popup-title {
+            font-size: 20px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .cubes-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            flex-grow: 1;
+            margin-bottom: 30px;
+        }
+
+        .service-cube {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.4;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.25, 1);
+        }
+
+        .service-cube:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .service-cube.selected {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: #FFFFFF;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .popup-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-align: center;
+            pointer-events: none; 
+            transition: all 0.4s ease;
+        }
+
+        .popup-submit-btn.enabled {
+            border-color: #FFFFFF;
+            color: #000000;
+            background-color: #FFFFFF;
+            pointer-events: auto;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        }
+        .popup-submit-btn.enabled:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+    <!-- «НАРУЖКА»: Физическое матовое паспарту по краям экрана с вырезанным центром -->
+    <div class="premium-frame"></div>
+
+    <!-- Навигация, лежащая строго поверх матовой наружки -->
+    <div class="nav-container">
+        <a href="#capabilities" class="nav-link">Capabilities</a>
+        <a href="#works" class="nav-link">Works</a>
+        <a href="#footer" class="nav-link">Contact</a>
+    </div>
+
+    <!-- ВНУТРЯНКА САЙТА (Контент, уходящий под матовое стекло при скролле) -->
+
+    <!-- СЕКЦИЯ 1: ИНТРО -->
+    <section id="hero">
+        <div class="hero-logo">
+            <div class="brand-name">
+                <span class="base-letter">H</span>
+                <span class="inner-letter">I</span>
+                <span class="inner-letter">L</span>
+                <span class="inner-letter">V</span>
+                <span class="base-letter">L</span>
+            </div>
+            <div class="subtitle">.Studio</div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 2: ИИ-КОМПЕТЕНЦИИ -->
+    <section id="capabilities">
+        <h2 class="section-title">Core Capabilities</h2>
+        <div class="capabilities-grid">
+            <div class="pillar">
+                <h3>AI-Assisted Development & Rapid Prototyping</h3>
+                <p>Leveraging state-of-the-art AI coding assistants, LLM-based code generation, and automated debugging workflows to independently architect websites, browser-based games, and applications. This methodology drastically compresses MVP development timelines, skipping traditional engineering bottlenecks.</p>
+            </div>
+            <div class="pillar">
+                <h3>Generative AI for Commercial Media Production</h3>
+                <p>Applying cutting-edge generative image synthesis and AI video pipelines to produce and edit commercial-grade visual assets. Utilizing advanced prompt engineering techniques to guarantee consistent, brand-aligned aesthetic outputs at scale.</p>
+            </div>
+            <div class="pillar">
+                <h3>Local LLM Deployment & Autonomous AI Agents</h3>
+                <p>Configuring and deploying large language models inside local, on-premise environments via CLI and terminal infrastructure. Designing and orchestrating autonomous AI agent pipelines for deep workflow automation and secure, self-hosted AI architecture management.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 3: SELECTED WORKS -->
+    <section id="works">
+        <h2 class="section-title">Selected Works</h2>
+        <div class="works-grid">
+            <div class="work-item">
+                <div class="work-img-box"><img src="1.png" alt="Project 1"></div>
+                <div class="work-info"><span class="work-title">HILVL Studio Interface</span><span class="work-category">UI/UX Design</span></div>
+            </div>
+            <div class="work-item">
+                <div class="work-img-box"><img src="2.png" alt="Project 2"></div>
+                <div class="work-info"><span class="work-title">Cafe Menu System</span><span class="work-category">Frontend Dev</span></div>
+            </div>
+            <div class="work-item">
+                <div class="work-img-box"><img src="3.png" alt="Project 3"></div>
+                <div class="work-info"><span class="work-title">Cafe Light Theme</span><span class="work-category">Component Library</span></div>
+            </div>
+            <div class="work-item">
+                <div class="work-img-box"><img src="4.png" alt="Project 4"></div>
+                <div class="work-info"><span class="work-title">Vortex.Art Platform</span><span class="work-category">WebGL Experience</span></div>
+            </div>
+            <div class="work-item">
+                <div class="work-img-box"><img src="5.png" alt="Project 5"></div>
+                <div class="work-info"><span class="work-title">Bakery Section</span><span class="work-category">Product Design</span></div>
+            </div>
+            <div class="work-item">
+                <div class="work-img-box"><img src="6.png" alt="Project 6"></div>
+                <div class="work-info"><span class="work-title">M n Dubai Casa</span><span class="work-category">Mobile Menu App</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 4: ФУТЕР -->
+    <section id="footer">
+        <div class="footer-content">
+            <h2>Let's Create Something Extraordinary</h2>
+            <a href="#" class="cta-btn">Start a Project</a>
+        </div>
+    </section>
+
+    <!-- ХОСТИНГ СВЕТЛОГО МАТОВОГО ПОП-АП ОКНА -->
+    <div class="popup-overlay" id="projectPopup">
+        <div class="popup-window">
+            <button class="popup-close" id="closePopup">✕</button>
+            <h3 class="popup-title">Select Service</h3>
+            <div class="cubes-container">
+                <div class="service-cube" data-service="AI-Assisted Development & Rapid Prototyping">
+                    AI-Assisted Development & Rapid Prototyping
+                </div>
+                <div class="service-cube" data-service="Generative AI for Commercial Media Production">
+                    Generative AI for Commercial Media Production
+                </div>
+                <div class="service-cube" data-service="Local LLM Deployment & Autonomous AI Agents">
+                    Local LLM Deployment & Autonomous AI Agents
+                </div>
+            </div>
+            <a href="#" class="popup-submit-btn" id="submitProject">Send Request</a>
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ ПОП-АПОМ И ЭЛЕКТРОННОЙ ПОЧТОЙ -->
+    <script>
+        const openPopupBtn = document.querySelector('.cta-btn');
+        const popupOverlay = document.getElementById('projectPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const serviceCubes = document.querySelectorAll('.service-cube');
+        const submitBtn = document.getElementById('submitProject');
+        
+        let selectedService = "";
+
+        // Открытие окна
+        openPopupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            popupOverlay.classList.add('active');
+        });
+
+        // Закрытие окна по клику на крестик или фон
+        closePopupBtn.addEventListener('click', () => { closePopupAndReset(); });
+        popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupAndReset(); });
+
+        // Логика кубиков и сборка письма Mailto
+        serviceCubes.forEach(cube => {
+            cube.addEventListener('click', () => {
+                serviceCubes.forEach(c => c.classList.remove('selected'));
+                cube.classList.add('selected');
+                selectedService = cube.getAttribute('data-service');
+                submitBtn.classList.add('enabled');
+                
+                const email = "hilvl.studio212@gmail.com";
+                const subject = encodeURIComponent(`Project Request — ${selectedService}`);
+                const body = encodeURIComponent(`I would like to contact you to discuss acquiring your services for: ${selectedService}.`);
+                
+                submitBtn.setAttribute('href', `mailto:${email}?subject=${subject}&body=${body}`);
+            });
+        });
+
+        function closePopupAndReset() {
+            popupOverlay.classList.remove('active');
+            serviceCubes.forEach(c => c.classList.remove('selected'));
+            submitBtn.classList.remove('enabled');
+            submitBtn.setAttribute('href', '#');
+            selectedService = "";
+        }
+    </script>
+</body>
+</html>
